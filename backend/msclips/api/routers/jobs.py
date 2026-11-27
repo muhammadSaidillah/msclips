@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.api.schemas import JobOut
-from clipforge.core.db import get_session
-from clipforge.core.users import current_user
-from clipforge.models import Job, JobStatus, Project, ProjectStatus, User
+from msclips.api.schemas import JobOut
+from msclips.core.db import get_session
+from msclips.core.users import current_user
+from msclips.models import Job, JobStatus, Project, ProjectStatus, User
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 

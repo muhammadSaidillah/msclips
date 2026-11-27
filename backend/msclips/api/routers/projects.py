@@ -6,12 +6,12 @@ from fastapi.responses import FileResponse, RedirectResponse
 from sqlalchemy import func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.api.deps import owned_project
-from clipforge.api.projects_query import detail, summaries
-from clipforge.api.schemas import JobOut, ProjectDetail, ProjectList, ProjectUpdate
-from clipforge.core.db import get_session
-from clipforge.core.users import current_user
-from clipforge.models import (
+from msclips.api.deps import owned_project
+from msclips.api.projects_query import detail, summaries
+from msclips.api.schemas import JobOut, ProjectDetail, ProjectList, ProjectUpdate
+from msclips.core.db import get_session
+from msclips.core.users import current_user
+from msclips.models import (
     AssetKind,
     Job,
     JobStatus,
@@ -23,8 +23,8 @@ from clipforge.models import (
     UploadStatus,
     User,
 )
-from clipforge.storage import get_storage
-from clipforge.workers.queue import Queue, get_queue
+from msclips.storage import get_storage
+from msclips.workers.queue import Queue, get_queue
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 

@@ -4,21 +4,21 @@ import tempfile
 import uuid
 from pathlib import Path
 
-_TMP = Path(tempfile.mkdtemp(prefix="clipforge-test-"))
+_TMP = Path(tempfile.mkdtemp(prefix="msclips-test-"))
 os.environ.setdefault(
-    "CLIPFORGE_DATABASE_URL", "postgresql+asyncpg://clipforge:clipforge@localhost:5432/clipforge_test"
+    "MSCLIPS_DATABASE_URL", "postgresql+asyncpg://msclips:msclips@localhost:5432/msclips_test"
 )
-os.environ["CLIPFORGE_DATA_DIR"] = str(_TMP / "data")
-os.environ["CLIPFORGE_STORAGE_BACKEND"] = "local"
-os.environ["CLIPFORGE_CHUNK_SIZE_BYTES"] = str(64 * 1024)
+os.environ["MSCLIPS_DATA_DIR"] = str(_TMP / "data")
+os.environ["MSCLIPS_STORAGE_BACKEND"] = "local"
+os.environ["MSCLIPS_CHUNK_SIZE_BYTES"] = str(64 * 1024)
 
 import httpx  # noqa: E402
 import pytest  # noqa: E402
 
-from clipforge.api.main import create_app  # noqa: E402
-from clipforge.core.db import dispose_engine, get_engine  # noqa: E402
-from clipforge.models import Base  # noqa: E402
-from clipforge.workers import queue as queue_mod  # noqa: E402
+from msclips.api.main import create_app  # noqa: E402
+from msclips.core.db import dispose_engine, get_engine  # noqa: E402
+from msclips.models import Base  # noqa: E402
+from msclips.workers import queue as queue_mod  # noqa: E402
 
 
 class FakeQueue:

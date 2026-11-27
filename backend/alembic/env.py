@@ -20,8 +20,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from clipforge.core.config import get_settings
-from clipforge.models import Base
+from msclips.core.config import get_settings
+from msclips.models import Base
 
 target_metadata = Base.metadata
 config.set_main_option("sqlalchemy.url", get_settings().database_url)

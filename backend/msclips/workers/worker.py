@@ -1,11 +1,11 @@
-"""arq worker entry point:  arq clipforge.workers.worker.WorkerSettings"""
+"""arq worker entry point:  arq msclips.workers.worker.WorkerSettings"""
 
 import logging
 
-from clipforge.core.config import get_settings
-from clipforge.core.db import dispose_engine
-from clipforge.workers.queue import redis_settings
-from clipforge.workers.tasks import probe_source
+from msclips.core.config import get_settings
+from msclips.core.db import dispose_engine
+from msclips.workers.queue import redis_settings
+from msclips.workers.tasks import probe_source
 
 
 async def startup(ctx: dict) -> None:

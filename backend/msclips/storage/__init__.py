@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from functools import lru_cache
 from pathlib import Path
 
-from clipforge.core.config import Settings, get_settings
+from msclips.core.config import Settings, get_settings
 
 
 class StorageError(RuntimeError):

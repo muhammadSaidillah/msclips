@@ -44,7 +44,7 @@ function Logo() {
         </svg>
       </span>
       <span className="text-[15px] font-semibold tracking-tight">
-        CLIPFORGE <span className="text-accent">AI</span>
+        MSclips <span className="text-accent">Maker</span>
       </span>
     </Link>
   );

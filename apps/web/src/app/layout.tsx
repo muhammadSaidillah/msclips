@@ -7,7 +7,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CLIPFORGE AI",
+  title: "MSclips Maker",
   description: "Turn long videos into professionally edited vertical shorts.",
 };
 

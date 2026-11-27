@@ -5,14 +5,14 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.api.projects_query import summaries
-from clipforge.api.schemas import DashboardOut
-from clipforge.core.config import get_settings
-from clipforge.core.db import get_session
-from clipforge.core.users import current_user
-from clipforge.models import AssetKind, Job, JobStatus, MediaAsset, Project, ProjectStatus, User, VideoMetadata
-from clipforge.storage import get_storage
-from clipforge.workers.queue import Queue, get_queue
+from msclips.api.projects_query import summaries
+from msclips.api.schemas import DashboardOut
+from msclips.core.config import get_settings
+from msclips.core.db import get_session
+from msclips.core.users import current_user
+from msclips.models import AssetKind, Job, JobStatus, MediaAsset, Project, ProjectStatus, User, VideoMetadata
+from msclips.storage import get_storage
+from msclips.workers.queue import Queue, get_queue
 
 router = APIRouter(tags=["system"])
 

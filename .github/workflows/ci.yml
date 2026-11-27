@@ -11,12 +11,12 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: clipforge
-          POSTGRES_PASSWORD: clipforge
-          POSTGRES_DB: clipforge_test
+          POSTGRES_USER: msclips
+          POSTGRES_PASSWORD: msclips
+          POSTGRES_DB: msclips_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U clipforge" --health-interval 5s --health-retries 10
+          --health-cmd "pg_isready -U msclips" --health-interval 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -27,7 +27,7 @@ jobs:
       - name: Migrations apply cleanly
         working-directory: backend
         env:
-          CLIPFORGE_DATABASE_URL: postgresql+asyncpg://clipforge:clipforge@localhost:5432/clipforge_test
+          MSCLIPS_DATABASE_URL: postgresql+asyncpg://msclips:msclips@localhost:5432/msclips_test
         run: .venv/bin/alembic upgrade head && .venv/bin/alembic check && .venv/bin/alembic downgrade base
       - name: Tests
         working-directory: backend

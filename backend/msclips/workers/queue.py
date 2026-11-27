@@ -8,7 +8,7 @@ from typing import Protocol
 from arq import create_pool
 from arq.connections import ArqRedis, RedisSettings
 
-from clipforge.core.config import get_settings
+from msclips.core.config import get_settings
 
 
 class Queue(Protocol):

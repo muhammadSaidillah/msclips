@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from clipforge.core.config import get_settings
-from clipforge.workers.tasks import probe_source
+from msclips.core.config import get_settings
+from msclips.workers.tasks import probe_source
 from tests.helpers import upload_file
 
 
@@ -188,7 +188,7 @@ async def test_transient_failure_retries_then_succeeds(client, media_dir, monkey
     import pytest
     from arq import Retry
 
-    from clipforge.storage import get_storage
+    from msclips.storage import get_storage
 
     storage = get_storage()
     real_put = storage.put_file

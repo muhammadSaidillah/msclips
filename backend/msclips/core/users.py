@@ -7,11 +7,11 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.core.db import get_session
-from clipforge.models import User
+from msclips.core.db import get_session
+from msclips.models import User
 
 LOCAL_USER_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
-LOCAL_USER_EMAIL = "local@clipforge.invalid"
+LOCAL_USER_EMAIL = "local@msclips.invalid"
 
 
 async def ensure_local_user(session: AsyncSession) -> User:

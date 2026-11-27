@@ -14,13 +14,13 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.api.projects_query import summaries
-from clipforge.api.schemas import CompleteOut, JobOut, UploadCreate, UploadOut, UploadStarted
-from clipforge.core.config import get_settings
-from clipforge.core.db import get_session
-from clipforge.core.users import current_user
-from clipforge.models import Job, JobStatus, JobType, Project, ProjectStatus, UploadSession, UploadStatus, User
-from clipforge.workers.queue import Queue, get_queue
+from msclips.api.projects_query import summaries
+from msclips.api.schemas import CompleteOut, JobOut, UploadCreate, UploadOut, UploadStarted
+from msclips.core.config import get_settings
+from msclips.core.db import get_session
+from msclips.core.users import current_user
+from msclips.models import Job, JobStatus, JobType, Project, ProjectStatus, UploadSession, UploadStatus, User
+from msclips.workers.queue import Queue, get_queue
 
 router = APIRouter(prefix="/uploads", tags=["uploads"])
 

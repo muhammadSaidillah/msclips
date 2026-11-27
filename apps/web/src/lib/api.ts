@@ -131,7 +131,7 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
       cache: "no-store",
     });
   } catch {
-    throw new ApiError(0, `Cannot reach the CLIPFORGE API at ${API_URL}. Is the backend running?`);
+    throw new ApiError(0, `Cannot reach the MSclips Maker API at ${API_URL}. Is the backend running?`);
   }
   if (res.status === 204) return undefined as T;
   const text = await res.text();

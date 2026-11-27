@@ -9,7 +9,7 @@ from dataclasses import asdict, dataclass
 from fractions import Fraction
 from pathlib import Path
 
-from clipforge.core.config import get_settings
+from msclips.core.config import get_settings
 
 
 class MediaError(Exception):

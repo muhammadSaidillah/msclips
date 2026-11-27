@@ -3,9 +3,9 @@ import uuid
 from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.core.db import get_session
-from clipforge.core.users import current_user
-from clipforge.models import Project, User
+from msclips.core.db import get_session
+from msclips.core.users import current_user
+from msclips.models import Project, User
 
 
 async def owned_project(

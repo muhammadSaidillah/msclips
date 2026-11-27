@@ -5,7 +5,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.api.schemas import (
+from msclips.api.schemas import (
     AssetOut,
     JobOut,
     ProjectDetail,
@@ -13,7 +13,7 @@ from clipforge.api.schemas import (
     UploadOut,
     VideoMetadataOut,
 )
-from clipforge.models import AssetKind, Job, MediaAsset, Project, UploadSession, VideoMetadata
+from msclips.models import AssetKind, Job, MediaAsset, Project, UploadSession, VideoMetadata
 
 
 async def summaries(session: AsyncSession, projects: list[Project]) -> list[ProjectSummary]:

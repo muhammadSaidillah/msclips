@@ -18,10 +18,10 @@ from arq import Retry
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from clipforge.core.config import get_settings
-from clipforge.core.db import sessionmaker
-from clipforge.media.probe import MediaError, make_thumbnail, probe, verify_decodable
-from clipforge.models import (
+from msclips.core.config import get_settings
+from msclips.core.db import sessionmaker
+from msclips.media.probe import MediaError, make_thumbnail, probe, verify_decodable
+from msclips.models import (
     AssetKind,
     Job,
     JobStatus,
@@ -31,7 +31,7 @@ from clipforge.models import (
     UploadSession,
     VideoMetadata,
 )
-from clipforge.storage import Storage, get_storage
+from msclips.storage import Storage, get_storage
 
 log = logging.getLogger(__name__)
 

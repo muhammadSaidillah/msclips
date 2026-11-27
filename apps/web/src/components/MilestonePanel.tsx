@@ -31,7 +31,7 @@ export default function MilestonePanel({
           </div>
         </div>
         <p className="mt-5 max-w-2xl text-sm leading-relaxed text-ink-2">
-          This section is intentionally empty. CLIPFORGE AI ships features milestone by milestone, and nothing here is
+          This section is intentionally empty. MSclips Maker ships features milestone by milestone, and nothing here is
           simulated. What this section will do:
         </p>
         <ul className="mt-4 grid max-w-3xl gap-2 text-sm text-ink-2 sm:grid-cols-2">

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from clipforge.models import AssetKind, JobStatus, JobType, ProjectStatus, UploadStatus
+from msclips.models import AssetKind, JobStatus, JobType, ProjectStatus, UploadStatus
 
 
 class ORM(BaseModel):

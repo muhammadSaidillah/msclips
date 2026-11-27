@@ -90,7 +90,7 @@ export default function NewProjectPage() {
 
   return (
     <>
-      <PageHeader title="New Project" subtitle="Upload one long video. CLIPFORGE stores it and extracts its technical metadata." />
+      <PageHeader title="New Project" subtitle="Upload one long video. MSclips Maker stores it and extracts its technical metadata." />
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-5">

@@ -1,4 +1,4 @@
-# CLIPFORGE AI
+# MSclips Maker
 
 AI video repurposing platform: one long video in, professionally edited vertical shorts out
 (TikTok, Instagram Reels, YouTube Shorts). Built milestone by milestone. Nothing in the UI is
@@ -57,12 +57,12 @@ cp apps/web/.env.example apps/web/.env.local
 make web               # http://localhost:3000
 ```
 
-Configuration is via `CLIPFORGE_*` environment variables (see `backend/.env.example`).
+Configuration is via `MSCLIPS_*` environment variables (see `backend/.env.example`).
 
 ## Tests
 
 ```bash
-createdb -U clipforge clipforge_test     # once
+createdb -U msclips msclips_test     # once
 make test                                 # 17 backend tests (real Postgres + real ffmpeg) + lint/typecheck
 make e2e VIDEO=/path/to/video.mp4         # browser smoke test against the running stack
 ```

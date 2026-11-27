@@ -10,10 +10,10 @@ migrate:
 	cd backend && .venv/bin/alembic upgrade head
 
 api:
-	cd backend && .venv/bin/uvicorn clipforge.api.main:app --reload --port 8000
+	cd backend && .venv/bin/uvicorn msclips.api.main:app --reload --port 8000
 
 worker:
-	cd backend && .venv/bin/arq clipforge.workers.worker.WorkerSettings
+	cd backend && .venv/bin/arq msclips.workers.worker.WorkerSettings
 
 web-install:
 	cd apps/web && npm ci
@@ -21,7 +21,7 @@ web-install:
 web:
 	cd apps/web && npm run dev
 
-test:             ## backend tests (needs postgres with a clipforge_test database) + frontend checks
+test:             ## backend tests (needs postgres with a msclips_test database) + frontend checks
 	cd backend && .venv/bin/pytest -q
 	cd apps/web && npm run lint && npm run typecheck
 

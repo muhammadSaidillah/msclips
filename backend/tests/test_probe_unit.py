@@ -1,6 +1,6 @@
 import pytest
 
-from clipforge.media.probe import MediaError, aspect_label, orientation, parse_probe
+from msclips.media.probe import MediaError, aspect_label, orientation, parse_probe
 
 
 def test_aspect_labels():
