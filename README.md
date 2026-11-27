@@ -1,5 +1,7 @@
 # MSclips Maker
 
+**Demo cepat (satu perintah, butuh Docker):** `docker compose up --build`, lalu buka http://localhost:3000. Panduan lengkap: [docs/DEMO.md](docs/DEMO.md).
+
 AI video repurposing platform: one long video in, professionally edited vertical shorts out
 (TikTok, Instagram Reels, YouTube Shorts). Built milestone by milestone. Nothing in the UI is
 simulated: a feature is either real or clearly marked as arriving in a later milestone.
