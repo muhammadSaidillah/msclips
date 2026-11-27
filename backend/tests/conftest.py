@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import tempfile
 import uuid
@@ -11,6 +12,8 @@ os.environ.setdefault(
 os.environ["MSCLIPS_DATA_DIR"] = str(_TMP / "data")
 os.environ["MSCLIPS_STORAGE_BACKEND"] = "local"
 os.environ["MSCLIPS_CHUNK_SIZE_BYTES"] = str(64 * 1024)
+os.environ.setdefault("MSCLIPS_WHISPER_MODEL", "tiny")  # small + fast for tests
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 import httpx  # noqa: E402
 import pytest  # noqa: E402
@@ -85,4 +88,18 @@ def media_dir() -> Path:
     _ffmpeg(
         "-f", "lavfi", "-i", "sine=frequency=440:duration=2", "-c:a", "aac", str(d / "audio_only.mp4"),
     )
+    if shutil.which("espeak-ng"):
+        text = (
+            "Halo semuanya, selamat datang di podcast kita. Hari ini kita membahas cara memulai bisnis kecil. "
+            "Tips pertama, kenali pelanggan kamu sebelum menjual apa pun. Ajak mereka ngobrol dan dengarkan. "
+            "Tips kedua, pisahkan uang pribadi dan uang usaha sejak hari pertama. "
+            "Ini alasan nomor satu kenapa banyak usaha kecil bangkrut. "
+            "Terakhir, konsisten itu kunci. Terima kasih sudah mendengarkan."
+        )
+        subprocess.run(["espeak-ng", "-v", "id", "-s", "150", "-w", str(d / "speech.wav"), text], check=True)
+        _ffmpeg(
+            "-f", "lavfi", "-i", "testsrc2=size=1280x720:rate=30:duration=60", "-i", str(d / "speech.wav"),
+            "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000",
+            "-shortest", str(d / "talk.mp4"),
+        )
     return d

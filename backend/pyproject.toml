@@ -13,6 +13,10 @@ dependencies = [
   "arq>=0.26",
   "boto3>=1.34",
   "aiofiles>=23.2",
+  "anthropic>=2.14",
+  "faster-whisper>=1.2",
+  "opencv-python-headless>=5.1",
+  "numpy>=2.0",
 ]
 
 [project.optional-dependencies]
@@ -24,6 +28,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["msclips*"]
+
+[tool.setuptools.package-data]
+msclips = ["assets/*.md", "assets/fonts/*", "assets/models/*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -151,3 +151,104 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
 export const thumbnailUrl = (p: { id: string; updated_at: string }) =>
   `${API_URL}/projects/${p.id}/thumbnail?v=${encodeURIComponent(p.updated_at)}`;
 export const sourceUrl = (id: string) => `${API_URL}/projects/${id}/source`;
+
+export interface Candidate {
+  id: string;
+  rank: number;
+  title: string;
+  start_s: number;
+  end_s: number;
+  hook: string;
+  category: string;
+  reason: string;
+  transcript_text: string;
+  scores: Record<string, number>;
+  score: number;
+  confidence: number;
+  editing_style: string | null;
+  status: "proposed" | "selected" | "rejected";
+}
+
+export interface AnalysisState {
+  run: {
+    id: string;
+    status: "queued" | "transcribing" | "analyzing" | "succeeded" | "failed";
+    clip_count: number;
+    min_duration_s: number;
+    max_duration_s: number;
+    language: string | null;
+    model: string | null;
+    error: string | null;
+    notes: string | null;
+    created_at: string;
+  } | null;
+  job: Job | null;
+  transcript: {
+    language: string;
+    language_probability: number | null;
+    engine: string;
+    duration_s: number;
+    segment_count: number;
+    word_count: number;
+  } | null;
+  candidates: Candidate[];
+}
+
+export interface QcCheck {
+  name: string;
+  status: "pass" | "warn" | "fail";
+  detail: string;
+  fix: string | null;
+}
+
+export interface Render {
+  id: string;
+  candidate_id: string;
+  rank: number;
+  title: string;
+  duration_s: number;
+  status: "queued" | "rendering" | "succeeded" | "failed";
+  error: string | null;
+  settings: {
+    edit_style?: string;
+    subtitle_style?: string;
+    captions?: boolean;
+    show_hook: boolean;
+    resolved_style?: string;
+    resolved_style_name?: string;
+    style_reason?: string;
+  };
+  crop: { mode: string; face_frames: number; sampled_frames: number } | null;
+  qc: { status: "pass" | "warn" | "fail"; checks: QcCheck[] } | null;
+  job: Job | null;
+  file_size_bytes: number | null;
+  filename: string | null;
+  created_at: string;
+}
+
+export interface EditStyle {
+  id: string;
+  name: string;
+  tagline: string;
+  source: string;
+  group: "basic" | "podcast" | "showcase";
+  grade: string;
+  zoom: string;
+  framing: string;
+  showcase: boolean;
+  omitted: string[];
+}
+
+export interface StyleCatalog {
+  default: string;
+  styles: EditStyle[];
+}
+
+export interface Capabilities {
+  transcription: { engine: string; device: string };
+  ai: { model: string; api_key_configured: boolean };
+}
+
+export const renderFileUrl = (id: string, download = false) =>
+  `${API_URL}/renders/${id}/file${download ? "?download=true" : ""}`;
+export const rendersZipUrl = (projectId: string) => `${API_URL}/projects/${projectId}/renders.zip`;

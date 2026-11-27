@@ -1,0 +1,48 @@
+# MSclips Maker, everything in one command:
+#   docker compose up --build
+# then open http://localhost:3000
+# Put your Claude API key in a file named .env next to this file:  ANTHROPIC_API_KEY=...
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: msclips
+      POSTGRES_PASSWORD: msclips
+      POSTGRES_DB: msclips
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U msclips"]
+      interval: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+
+  api:
+    build: ./backend
+    environment: &backend-env
+      MSCLIPS_DATABASE_URL: postgresql+asyncpg://msclips:msclips@postgres:5432/msclips
+      MSCLIPS_REDIS_URL: redis://redis:6379/0
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes: [media:/data, models:/models]
+    ports: ["8000:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+
+  worker:
+    build: ./backend
+    command: ["arq", "msclips.workers.worker.WorkerSettings"]
+    environment: *backend-env
+    volumes: [media:/data, models:/models]
+    depends_on: [api]
+
+  web:
+    build: ./apps/web
+    ports: ["3000:3000"]
+    depends_on: [api]
+
+volumes:
+  pgdata:
+  media:
+  models:

@@ -27,6 +27,16 @@ class Settings(BaseSettings):
     allowed_extensions: list[str] = [".mp4", ".mov", ".m4v", ".mkv", ".webm", ".avi"]
     max_duration_s: float = 4 * 3600
 
+    # Transcription (local faster-whisper). Models download from Hugging Face on first use.
+    whisper_model: str = "small"
+    whisper_compute_type: str = "int8"
+    whisper_cpu_threads: int = 4
+    whisper_device: str = "cpu"
+
+    # AI clip discovery (Claude API). The key is read from ANTHROPIC_API_KEY by the SDK.
+    anthropic_model: str = "claude-opus-5-5"
+    anthropic_effort: str = "high"
+
     ffprobe_bin: str = "ffprobe"
     ffmpeg_bin: str = "ffmpeg"
 

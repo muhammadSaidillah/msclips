@@ -19,7 +19,7 @@ jobs:
           --health-cmd "pg_isready -U msclips" --health-interval 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg espeak-ng fontconfig
       - uses: astral-sh/setup-uv@v6
       - name: Install
         working-directory: backend
@@ -31,6 +31,8 @@ jobs:
         run: .venv/bin/alembic upgrade head && .venv/bin/alembic check && .venv/bin/alembic downgrade base
       - name: Tests
         working-directory: backend
+        env:
+          HF_HUB_DISABLE_XET: "1"
         run: .venv/bin/pytest -q
 
   web:

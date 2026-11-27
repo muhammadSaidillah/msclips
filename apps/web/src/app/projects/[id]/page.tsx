@@ -13,11 +13,11 @@ import {
   Pencil,
   Ratio,
   RotateCcw,
-  Sparkles,
   Trash2,
   UploadCloud,
   X,
 } from "lucide-react";
+import ClipStudio from "@/components/ClipStudio";
 import { Card, ErrorNote, ProgressBar, Spinner, StatusBadge, btn } from "@/components/ui";
 import { api, sourceUrl, thumbnailUrl, type Job, type ProjectDetail } from "@/lib/api";
 import { formatBitrate, formatBytes, formatChannels, formatContainer, formatDuration, formatRelative } from "@/lib/format";
@@ -82,6 +82,17 @@ export default function ProjectPage() {
   const [resume, setResume] = useState<UploadState | null>(null);
   const resumer = useRef<ChunkedUploader | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const stopAt = useRef<number | null>(null);
+
+  const preview = (start: number, end: number) => {
+    const v = videoRef.current;
+    if (!v) return;
+    stopAt.current = end;
+    v.currentTime = start;
+    v.play().catch(() => {});
+    v.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   const { data: p, error, loading, refresh, setData } = usePolling(() => api<ProjectDetail>(`/projects/${id}`), {
     intervalMs: 1200,
@@ -231,7 +242,14 @@ export default function ProjectPage() {
           <div className="overflow-hidden rounded-xl border border-line bg-black">
             {p.status === "ready" && p.source ? (
               <video
+                ref={videoRef}
                 key={p.source.id}
+                onTimeUpdate={(e) => {
+                  if (stopAt.current != null && e.currentTarget.currentTime >= stopAt.current) {
+                    e.currentTarget.pause();
+                    stopAt.current = null;
+                  }
+                }}
                 controls
                 preload="metadata"
                 poster={p.has_thumbnail ? thumbnailUrl(p) : undefined}
@@ -376,16 +394,15 @@ export default function ProjectPage() {
             </Card>
           )}
 
-          <Card className="border-dashed p-5">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Sparkles className="h-4 w-4 text-accent" /> Next: AI clip discovery
-            </div>
-            <p className="mt-2 text-sm text-muted">
-              Transcription, scene analysis and clip scoring arrive in Milestone 2. Your stored video and metadata will be used as-is.
-            </p>
-          </Card>
+
         </aside>
       </div>
+
+      {p.status === "ready" && m && (
+        <div className="mt-8">
+          <ClipStudio projectId={p.id} durationS={m.duration_s} hasAudio={m.has_audio} onPreview={preview} />
+        </div>
+      )}
     </>
   );
 }

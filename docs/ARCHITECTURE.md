@@ -180,3 +180,18 @@ Known limits of M1 (tracked for later):
 - Uploads abandoned without cancel keep their staged bytes (never silently deleted); a
   cleanup policy with user-visible expiry comes with M6 storage management.
 - Status updates use polling (1.2–3 s); SSE/WebSocket can replace it when render jobs land.
+
+## 7. Demo pipeline: AI clip discovery, rendering, editing styles
+
+Flow: transcript (faster-whisper, word timestamps) → Claude picks segments by segment id → boundaries snapped to
+words/sentences → user selects clips and an editing style → worker renders 1080x1920 → automatic QC → download/ZIP.
+
+Editing styles (`backend/msclips/media/styles.py`, `GET /api/v1/styles`) are real render settings: caption
+typography (bundled Inter, Inter Tight, Newsreader, Barlow Condensed), keyword choice, reveal behaviour (highlight /
+ghost / appear-as-spoken), colour grade, zoom rhythm (zoompan, hard cuts), framing (speaker tracking or one static
+crop) and optional Before/After showcase layouts (cards with rounded masks and baked shadows).
+The podcast styles are derived from the user's editing skills (podcast-editor-v1…animasi-10, podcast-clip-editor).
+**Auto** picks a style per clip from the AI's `editing_style`, then `category` labels.
+
+Not reproduced yet (listed per style in `omitted`): generated illustration/B-roll layers, sound effects, the animated
+editor-timeline panel, glitch flashes. Nothing removes watermarks from footage.
