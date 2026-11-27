@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from msclips.models import AssetKind, JobStatus, JobType, ProjectStatus, UploadStatus
 
@@ -132,3 +132,100 @@ class DashboardOut(BaseModel):
     total_source_duration_s: float
     active_jobs: int
     recent_projects: list[ProjectSummary]
+
+
+class AnalysisCreate(BaseModel):
+    clip_count: int = Field(ge=1, le=30)
+    min_duration_s: float = Field(default=20, ge=5, le=180)
+    max_duration_s: float = Field(default=60, ge=10, le=180)
+    language: str | None = Field(default=None, pattern=r"^[a-z]{2,3}$")
+
+
+class CandidateOut(ORM):
+    id: uuid.UUID
+    rank: int
+    title: str
+    start_s: float
+    end_s: float
+    hook: str
+    category: str
+    reason: str
+    transcript_text: str
+    scores: dict
+    score: float
+    confidence: float
+    editing_style: str | None
+    status: str
+
+
+class AnalysisRunOut(ORM):
+    id: uuid.UUID
+    status: str
+    clip_count: int
+    min_duration_s: float
+    max_duration_s: float
+    language: str | None
+    model: str | None
+    error: str | None
+    notes: str | None
+    created_at: datetime
+
+
+class TranscriptInfo(ORM):
+    id: uuid.UUID
+    language: str
+    language_probability: float | None
+    engine: str
+    duration_s: float
+    segment_count: int
+    word_count: int
+
+
+class AnalysisState(BaseModel):
+    run: AnalysisRunOut | None
+    job: JobOut | None
+    transcript: TranscriptInfo | None
+    candidates: list[CandidateOut]
+
+
+class CandidateUpdate(BaseModel):
+    status: str = Field(pattern=r"^(proposed|selected|rejected)$")
+
+
+class RenderCreate(BaseModel):
+    candidate_ids: list[uuid.UUID] = Field(min_length=1, max_length=30)
+    edit_style: str | None = Field(default=None, description="'auto' or a style id from GET /styles")
+    subtitle_style: str | None = Field(default=None, pattern=r"^(bold|clean|karaoke|none)$",
+                                       description="Deprecated: use edit_style and captions")
+    captions: bool = True
+    show_hook: bool = True
+
+    @model_validator(mode="after")
+    def _style(self):
+        from msclips.media.styles import STYLES
+
+        if self.edit_style is None:
+            if self.subtitle_style == "none":
+                self.edit_style, self.captions = "clean", False
+            else:
+                self.edit_style = self.subtitle_style or "auto"
+        if self.edit_style != "auto" and self.edit_style not in STYLES:
+            raise ValueError(f"Unknown edit_style '{self.edit_style}'.")
+        return self
+
+
+class RenderOut(BaseModel):
+    id: uuid.UUID
+    candidate_id: uuid.UUID
+    rank: int
+    title: str
+    duration_s: float
+    status: str
+    error: str | None
+    settings: dict
+    crop: dict | None
+    qc: dict | None
+    job: JobOut | None
+    file_size_bytes: int | None
+    filename: str | None
+    created_at: datetime
