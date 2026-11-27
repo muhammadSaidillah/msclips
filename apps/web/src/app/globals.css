@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #0a0b0d;
+  --color-surface: #111317;
+  --color-surface-2: #171a1f;
+  --color-surface-3: #1e2128;
+  --color-line: #262a32;
+  --color-line-strong: #333844;
+  --color-ink: #eceef2;
+  --color-ink-2: #b4b8c2;
+  --color-muted: #7d828e;
+  --color-accent: #ff7a45;
+  --color-accent-strong: #ff6229;
+  --color-accent-soft: #ff7a4522;
+  --color-ok: #3ecf8e;
+  --color-info: #5ea2ff;
+  --color-warn: #f5b942;
+  --color-bad: #ff5d5d;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html,
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes cf-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-surface-3) 50%, var(--color-surface-2) 75%);
+  background-size: 200% 100%;
+  animation: cf-shimmer 1.4s linear infinite;
+}

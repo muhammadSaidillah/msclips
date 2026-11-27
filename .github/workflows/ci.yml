@@ -1,0 +1,51 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: msclips
+          POSTGRES_PASSWORD: msclips
+          POSTGRES_DB: msclips_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U msclips" --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: astral-sh/setup-uv@v6
+      - name: Install
+        working-directory: backend
+        run: uv venv .venv -p 3.13 && uv pip install --python .venv/bin/python -e ".[dev]"
+      - name: Migrations apply cleanly
+        working-directory: backend
+        env:
+          MSCLIPS_DATABASE_URL: postgresql+asyncpg://msclips:msclips@localhost:5432/msclips_test
+        run: .venv/bin/alembic upgrade head && .venv/bin/alembic check && .venv/bin/alembic downgrade base
+      - name: Tests
+        working-directory: backend
+        run: .venv/bin/pytest -q
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build

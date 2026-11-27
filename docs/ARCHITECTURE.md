@@ -1,4 +1,4 @@
-# CLIPFORGE AI — Architecture & Build Plan
+# MSclips Maker — Architecture & Build Plan
 
 Status: Milestone 1 implemented and tested (see README). This document is the source of truth for how the
 system is split, what is stored, and what each milestone delivers. Anything not
@@ -26,7 +26,7 @@ listed as "implemented" below does **not** exist yet, and the UI says so.
                         │ REST (JSON + chunked binary upload)
             ┌───────────▼─────────────┐
             │ API (FastAPI)           │  auth, validation, project state,
-            │ clipforge.api           │  upload sessions, job submission
+            │ msclips.api           │  upload sessions, job submission
             └──┬──────────┬───────────┘
                │          │ enqueue (Redis / arq)
                │   ┌──────▼──────────────────────────────┐
@@ -39,19 +39,19 @@ listed as "implemented" below does **not** exist yet, and the UI says so.
                │   └──────┬──────────────────────────────┘
         ┌──────▼───┐  ┌───▼──────────────┐
         │PostgreSQL│  │ Object storage   │  local FS (dev) or S3-compatible
-        └──────────┘  │ clipforge.storage│  (MinIO / R2 / S3)
+        └──────────┘  │ msclips.storage│  (MinIO / R2 / S3)
                       └──────────────────┘
 ```
 
 Module boundaries (one Python package, separate entry points):
 
-- `clipforge.core` — settings, DB engine/session, logging.
-- `clipforge.models` — SQLAlchemy models (the only place schema lives; Alembic migrates it).
-- `clipforge.storage` — `Storage` interface with `LocalStorage` and `S3Storage`.
-- `clipforge.media` — FFmpeg/ffprobe wrappers (pure functions, no DB).
-- `clipforge.api` — FastAPI app and routers. Never runs FFmpeg on the request path.
-- `clipforge.workers` — arq worker settings and tasks. Tasks own DB state transitions of jobs.
-- Later: `clipforge.ai` (Claude orchestration), `clipforge.render`, `clipforge.social`.
+- `msclips.core` — settings, DB engine/session, logging.
+- `msclips.models` — SQLAlchemy models (the only place schema lives; Alembic migrates it).
+- `msclips.storage` — `Storage` interface with `LocalStorage` and `S3Storage`.
+- `msclips.media` — FFmpeg/ffprobe wrappers (pure functions, no DB).
+- `msclips.api` — FastAPI app and routers. Never runs FFmpeg on the request path.
+- `msclips.workers` — arq worker settings and tasks. Tasks own DB state transitions of jobs.
+- Later: `msclips.ai` (Claude orchestration), `msclips.render`, `msclips.social`.
 
 Rules enforced in code:
 - A project is `ready` only after the worker has probed the stored file successfully.
@@ -62,11 +62,11 @@ Rules enforced in code:
 ## 2. Folder structure
 
 ```
-clipforge/
+msclips/
 ├── apps/web/                 Next.js 16 + Tailwind v4 (App Router, TypeScript)
 │   └── src/{app,components,lib}
 ├── backend/
-│   ├── clipforge/{core,models,storage,media,api,workers}
+│   ├── msclips/{core,models,storage,media,api,workers}
 │   ├── alembic/              migrations
 │   ├── tests/                pytest (real Postgres + real ffmpeg fixtures)
 │   └── pyproject.toml
